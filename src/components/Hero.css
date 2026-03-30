@@ -170,19 +170,17 @@
   /* Rendered BEHIND the pills so they appear to bounce/land on the invisible physical line spanning exactly at the text's top edge */
 
   font-family: var(--font-serif);
-  font-size: clamp(5.5rem, 17.5vw, 20rem);
-  /* Significantly increased for massive desktop impact */
+  font-size: clamp(4rem, 10.5vw, 12rem);
+  /* Optimized to fit 12 characters on one line without overflow */
   font-weight: 500;
   font-style: normal;
   color: #4a4a4f;
-  letter-spacing: 0.05em;
-  /* Added space between letters */
+  letter-spacing: 0.02em;
   line-height: 0.8;
-  padding: 0;
+  padding: 0 4%;
   text-align: center;
   pointer-events: none;
   white-space: nowrap;
-  /* Text shouldn't block physics drags */
 }
 
 /* ---------- Responsive ---------- */
@@ -209,7 +207,8 @@
   }
 
   .hero-name-display {
-    font-size: clamp(3rem, 16vw, 8rem);
+    font-size: clamp(2rem, 9vw, 6rem);
+    /* Reduced to fit on mobile screens */
     padding: 0 5%;
     bottom: 12vh;
   }
