@@ -1,0 +1,215 @@
+/* ===================================================
+   HERO DARK — Interactive Physics Engine Integration
+   =================================================== */
+
+.hero-dark {
+  background-color: #0f0f11;
+  color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  /* Contains the physics bodies */
+}
+
+/* ---------- Top Bar ---------- */
+.hero-topbar {
+  display: flex;
+  justify-content: flex-end;
+  /* Keep button aligned to right now that left text is removed */
+  align-items: flex-start;
+  padding: 2rem 2.5rem;
+  position: relative;
+  z-index: 100;
+  /* Above the physics so it can be clicked */
+  pointer-events: none;
+  /* Let empty space click through to physics */
+}
+
+.hero-tagline {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 1.15rem;
+  /* Increased font size */
+  font-weight: 700;
+  /* Made it explicitly bold */
+  font-family: var(--font-body);
+  color: #a1a1aa;
+  max-width: 500px;
+  line-height: 1.5;
+  pointer-events: auto;
+  /* Re-enable clicks for text if needed */
+}
+
+.arrow-right {
+  color: #77777a;
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 10px;
+  height: 10px;
+  font-size: 1.5em;
+}
+
+.resume-pill-btn {
+  pointer-events: auto;
+  /* Crucial so button works */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #333;
+  border-radius: 50px;
+  padding: 0.8rem 2.0rem;
+  /* Increased padding proportionally */
+  font-size: 1.25rem;
+  /* Increased font size significantly */
+  color: #e4e4e7;
+  text-decoration: none;
+  font-family: var(--font-body);
+  background: transparent;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.resume-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: #555;
+  color: #fff;
+}
+
+/* ---------- Scene Container ---------- */
+.scene-container {
+  position: absolute;
+  inset: 0;
+  /* Cover entire hero area */
+  z-index: 10;
+  /* Below topbar, above background */
+  pointer-events: auto;
+  /* Required to track fast mouse movements */
+}
+
+/* ---------- Physics Pills ---------- */
+.physics-pill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  /* Hint to GPU for buttery 60hz smooth tracking */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 1px solid #2e2e34;
+  border-radius: 80px;
+  padding: 1.1rem 2.4rem;
+  font-size: 1.7rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #e4e4e7;
+  background: #18181b;
+
+  cursor: grab;
+  /* Shows grabbable hand */
+  user-select: none;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+.physics-pill:active {
+  cursor: grabbing;
+}
+
+/* Remove hover transitions on border since physics bodies move natively, CSS transitions on transform break sync */
+.physics-pill:hover {
+  border-color: #555;
+}
+
+/* Highlight pill with green dot */
+.pill-highlight {
+  background: #18181b;
+}
+
+/* Circle pill overrides */
+.pill-circle {
+  width: 90px;
+  height: 90px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 2rem;
+  background: #f0f0f0;
+  color: #0f0f11;
+  border: none;
+}
+
+.pill-photo {
+  width: 116px;
+  height: 116px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Green availability dot */
+.green-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+/* ---------- Giant Name Platform ---------- */
+.hero-name-display {
+  position: absolute;
+  bottom: 10vh;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  z-index: 5;
+  /* Rendered BEHIND the pills so they appear to bounce/land on the invisible physical line spanning exactly at the text's top edge */
+
+  font-family: var(--font-serif);
+  font-size: 14.5vw;
+  /* Slightly increased scale */
+  font-weight: 500;
+  font-style: normal;
+  color: #4a4a4f;
+  letter-spacing: 0.05em;
+  /* Added space between letters */
+  line-height: 0.8;
+  padding: 0;
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+  /* Text shouldn't block physics drags */
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .physics-pill {
+    font-size: 1.15rem;
+    padding: 0.8rem 1.8rem;
+  }
+
+  .pill-circle {
+    width: 76px;
+    height: 76px;
+    font-size: 1.5rem;
+  }
+
+  .pill-photo {
+    width: 82px;
+    height: 82px;
+  }
+
+  .resume-pill-btn {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .hero-name-display {
+    font-size: clamp(3.5rem, 16vw, 8rem);
+    padding: 0 1.2rem 2rem;
+  }
+}

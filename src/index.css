@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  --bg-color: #09090b;
+  --text-main: #f0f0f0;
+  --text-grey: #a1a1aa;
+  --text-light: #27272a;
+  --accent-blue: #6366f1;
+  --border-color: #27272a;
+  
+  --font-body: 'Poppins', sans-serif;
+  --font-display: 'Anton', sans-serif;
+  --font-script: 'Caveat', cursive;
+  --font-serif: 'Playfair Display', serif;
+  --font-hero: 'Instrument Serif', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-main);
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+/* Base selection color for blue accent */
+::selection {
+  background-color: var(--accent-blue);
+  color: white;
+}
+
+section {
+  padding: 5rem 10%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  section {
+    padding: 4rem 5%;
+  }
+}

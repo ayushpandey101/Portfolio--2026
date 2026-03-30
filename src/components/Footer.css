@@ -1,0 +1,98 @@
+/* --- Footer Section --- */
+.footer {
+  background-color: #09090b;
+  color: #ffffff;
+  padding: 6rem 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-top: 1px solid #222;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.footer-top-text {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid #333;
+  border-radius: 50px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.btn-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #555;
+}
+
+.email-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3rem 0;
+  width: 100%;
+}
+
+.huge-email {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 6vw, 6.5rem);
+  font-weight: 400;
+  color: #e4e4e7;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  word-break: break-all;
+  transition: color 0.3s ease;
+}
+
+.huge-email:hover {
+  color: #71717a;
+}
+
+.copy-btn {
+  background: #18181b;
+  border: 1px solid #27272a;
+  padding: 0.4rem 1rem;
+}
+
+.copy-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.social-pills {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.footer-time {
+  font-size: 0.8rem;
+  color: #71717a;
+  font-family: var(--font-body);
+}
