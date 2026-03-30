@@ -170,8 +170,8 @@
   /* Rendered BEHIND the pills so they appear to bounce/land on the invisible physical line spanning exactly at the text's top edge */
 
   font-family: var(--font-serif);
-  font-size: 14.5vw;
-  /* Slightly increased scale */
+  font-size: clamp(5.5rem, 17.5vw, 20rem);
+  /* Significantly increased for massive desktop impact */
   font-weight: 500;
   font-style: normal;
   color: #4a4a4f;
@@ -209,7 +209,8 @@
   }
 
   .hero-name-display {
-    font-size: clamp(3.5rem, 16vw, 8rem);
-    padding: 0 1.2rem 2rem;
+    font-size: clamp(3rem, 16vw, 8rem);
+    padding: 0 5%;
+    bottom: 12vh;
   }
 }

@@ -42,13 +42,15 @@ const Hero = () => {
     const world = engine.world;
 
     // Smooth, heavy gravity
-    engine.world.gravity.y = 0.8;
+    engine.world.gravity.y = cw < 768 ? 0.6 : 0.8;
 
-    // Raised groundLevel adjusted for the massive 15.8vw text so pills correctly bounce above it!
-    const groundHeight = cw < 768 ? ch * 0.15 : ch * 0.27;
+    // GROUND CALCULATION: Adjusted to be ABOVE the "Ayush Pandey" text.
+    // Increased groundHeight for mobile to ensure pills sit atop the responsive name.
+    const groundHeight = cw < 768 ? ch * 0.25 : ch * 0.28;
     const groundLevel = ch - groundHeight;
 
     const wallOptions = {
+
       isStatic: true,
       render: { visible: false },
       friction: 0.5,
@@ -62,71 +64,65 @@ const Hero = () => {
     Composite.add(world, [ground, leftWall, rightWall]);
 
     // Create Pill Bodies
-    const physicsBodies = [];
+    const createPillBodies = () => {
+      const bodies = [];
+      pillRefs.current.forEach((el, index) => {
+        if (!el) return;
 
-    pillRefs.current.forEach((el, index) => {
-      if (!el) return;
+        const config = pillsConfig[index];
+        const rect = el.getBoundingClientRect();
+        // Use current DOM size for physics body
+        const w = rect.width;
+        const h = rect.height;
 
-      const config = pillsConfig[index];
-      const rect = el.getBoundingClientRect();
-      const w = rect.width > 20 ? rect.width : 120;
-      const h = rect.height > 20 ? rect.height : 40;
+        // Start position (randomized near top)
+        const startX = Math.random() * (cw - 200) + 100;
+        const startY = -(Math.random() * 500 + index * 100);
 
-      // Start position (randomized near top so they fall in)
-      const startX = Math.random() * (cw - 200) + 100;
-      const startY = -(Math.random() * 800 + 100);
+        const commonOptions = {
+          restitution: 0.6,
+          friction: 0.1,
+          frictionAir: 0.02,
+          density: config.type === 'circle' ? 0.05 : 0.01,
+          render: { visible: false }
+        };
 
-      let body;
-      const commonOptions = {
-        restitution: 0.7, // Elastic bounce
-        friction: 0.1,
-        frictionAir: 0.01,
-        density: config.type === 'circle' ? 0.05 : 0.01,
-        render: { visible: false }
-      };
+        let body;
+        if (config.type === 'circle') {
+          body = Bodies.circle(startX, startY, w / 2, commonOptions);
+        } else {
+          body = Bodies.rectangle(startX, startY, w, h, commonOptions);
+        }
 
-      if (config.type === 'circle') {
-        const radius = config.radius || (w / 2);
-        body = Bodies.circle(startX, startY, radius, commonOptions);
-      } else {
-        body = Bodies.rectangle(startX, startY, w, h, commonOptions);
-      }
+        body.plugin = { domElement: el };
+        bodies.push(body);
+      });
+      return bodies;
+    };
 
-      // Link body to DOM element safely
-      body.plugin = body.plugin || {};
-      body.plugin.domElement = el;
-      physicsBodies.push(body);
-    });
-
+    let physicsBodies = createPillBodies();
     Composite.add(world, physicsBodies);
 
     // Mouse Interaction
     const mouse = Mouse.create(container);
-    // Crucial: remove all default scroll interception so the user can scroll the page natively!
     mouse.element.removeEventListener('wheel', mouse.mousewheel);
     mouse.element.removeEventListener('mousewheel', mouse.mousewheel);
-    mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
 
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: { visible: false }
-      }
+      constraint: { stiffness: 0.2, render: { visible: false } }
     });
 
-    // Fix Mobile Scrolling by conditionally passing touch events:
-    // Remove Matter's default aggressive touch handlers
+    // Fix Mobile Scrolling
     mouse.element.removeEventListener('touchstart', mouse.mousedown);
     mouse.element.removeEventListener('touchmove', mouse.mousemove);
     mouse.element.removeEventListener('touchend', mouse.mouseup);
 
-    // Only prevent default on touch if we actually grabbed a pill!
     mouse.element.addEventListener('touchstart', (e) => {
-      // Find if we touched a physics body DOM element
       const isPill = e.target.classList && e.target.classList.contains('physics-pill');
-      if (isPill || mouseConstraint.body) {
-        e.preventDefault(); // Stop native scroll only when dragging a physics object
+      if (isPill) {
+        // Only prevent scroll if we're actually over a pill
+        e.preventDefault();
         mouse.mousedown(e);
       }
     }, { passive: false });
@@ -144,7 +140,7 @@ const Hero = () => {
 
     Composite.add(world, mouseConstraint);
 
-    // Sync Loop: update DOM transforms to match physics body transforms
+    // Sync Loop
     let animationFrame;
     const updateDOM = () => {
       physicsBodies.forEach((body) => {
@@ -158,18 +154,27 @@ const Hero = () => {
 
     updateDOM();
 
-    // Start Physics Engine
+    // Start Physics
     const runner = Runner.create();
     Runner.run(runner, engine);
 
-    // Resize Handling
+    // Resize Handling: Re-initialize or update ground
     const handleResize = () => {
       if (!container) return;
       const newCw = container.clientWidth;
       const newCh = container.clientHeight;
-      const newGroundHeight = newCw < 768 ? newCh * 0.15 : newCh * 0.27;
-      Matter.Body.setPosition(ground, { x: newCw / 2, y: newCh - newGroundHeight + 25 });
+      const newGroundHeight = newCw < 768 ? newCh * 0.18 : newCh * 0.28;
+      const newGroundLevel = newCh - newGroundHeight;
+
+      Matter.Body.setPosition(ground, { x: newCw / 2, y: newGroundLevel + 25 });
       Matter.Body.setPosition(rightWall, { x: newCw + 25, y: newCh / 2 });
+
+      // Optional: reposition bodies if they fall off
+      physicsBodies.forEach(body => {
+        if (body.position.y > newCh || body.position.x > newCw) {
+          Matter.Body.setPosition(body, { x: Math.random() * newCw, y: -100 });
+        }
+      });
     };
     window.addEventListener('resize', handleResize);
 
